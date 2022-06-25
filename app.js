@@ -422,17 +422,17 @@ async function run() {
   }
 }
 
-var minutes = 5
+var minutes = 30
 var the_interval = minutes * 60 * 1000;
 
 setInterval(function () {
   console.log("I am doing my 5 minutes check");
   run()
 }, the_interval);
+;
 
-setInterval(function () {
-  console.log("I am doing my 15minutes check");
-}, 15000);
+console.log("init app")
 
+app.listen(process.env.PORT || 3000,
+  () => console.log("Server is running..."));
 
-module.exports = app;
