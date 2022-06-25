@@ -422,7 +422,7 @@ async function run() {
   }
 }
 
-var minutes = 30
+var minutes = 5
 var the_interval = minutes * 60 * 1000;
 
 setInterval(function () {
