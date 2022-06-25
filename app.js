@@ -430,5 +430,9 @@ setInterval(function () {
   run()
 }, the_interval);
 
+setInterval(function () {
+  console.log("I am doing my 15minutes check");
+}, 15000);
+
 
 module.exports = app;
