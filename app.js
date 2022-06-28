@@ -415,12 +415,12 @@ async function run() {
   }
 }
 
-var minutes = 60
+var minutes = 5
 var the_interval = minutes * 60 * 1000;
 
-// setInterval(function () {
-//   run()
-// }, the_interval);
+setInterval(function () {
+  run()
+}, the_interval);
 run()
 
 
