@@ -162,7 +162,7 @@ async function run() {
   console.log('yoo')
 
   // Find all customers
-  const docs = await Contract.find({}).sort({ $natural: 1 }).limit(2);
+  const docs = await Contract.find({}).sort({ $natural: 1 }).limit(1000);
   console.log(docs)
   // let target = Contract.findOne({ fundAddress: docs[0].fundAddress });
 
@@ -415,7 +415,7 @@ async function run() {
   }
 }
 
-var minutes = 5
+var minutes = 60
 var the_interval = minutes * 60 * 1000;
 
 setInterval(function () {
