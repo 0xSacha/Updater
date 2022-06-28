@@ -162,7 +162,7 @@ async function run() {
   console.log('yoo')
 
   // Find all customers
-  const docs = await Contract.find({}).sort({ $natural: 1 }).limit(1000);
+  const docs = await Contract.find({}).sort({ $natural: 1 }).limit(100);
   console.log(docs)
   // let target = Contract.findOne({ fundAddress: docs[0].fundAddress });
 
