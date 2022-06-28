@@ -10,6 +10,7 @@
     "debug": "~2.6.9",
     "express": "~4.16.1",
     "format": "^0.2.2",
+    "heroku": "^7.60.2",
     "http-errors": "~1.6.3",
     "moment": "^2.29.3",
     "mongoose": "^6.4.0",
@@ -20,7 +21,6 @@
   },
   "description": "",
   "main": "app.js",
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/0xSacha/Updater.git"
