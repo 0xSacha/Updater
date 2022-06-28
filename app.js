@@ -103,8 +103,6 @@ app.use(function (err, req, res, next) {
   res.render('error');
 });
 
-
-
 const Contract = mongoose.models.Contract || mongoose.model("Contract", ContractSchema);
 const UserInfo = mongoose.models.User || mongoose.model("User", UserSchema);
 
@@ -161,19 +159,21 @@ async function post(tab) {
 }
 
 async function run() {
+  console.log('yoo')
 
   // Find all customers
-  const docs = await Contract.find();
+  const docs = await Contract.find({}).sort({ $natural: 1 }).limit(1000);
+  console.log(docs)
   // let target = Contract.findOne({ fundAddress: docs[0].fundAddress });
 
-
   for (let index = 0; index < docs.length; index++) {
-    DataFinance = docs[index].dataFinance
+    // DataFinance = docs[index].dataFinance
     let currentDataFinance = {
       sharePrice: 0,
       date: 0,
       gav: 0,
     }
+
 
     let FinalRender = {
       fundAddress: docs[index].fundAddress,
@@ -196,35 +196,36 @@ async function run() {
     let x = h2d(docs[index].fundAddress)
     // console.log(x)
 
-    const res1 = provider.callContract({
+     await provider.callContract({
       contractAddress: comptrolleur,
       entrypoint: "getSharePrice",
       calldata: [x]
-    });
-    res1
+    })
+
       .then((value) => {
         const sharePrice_ = h2d(value.result[0]);
         currentDataFinance.sharePrice = (parseFloat(sharePrice_) / 1000000000000000000)
 
-        const res2 = provider.callContract({
+        provider.callContract({
           contractAddress: comptrolleur,
           entrypoint: "calculGav",
           calldata: [x]
-        });
-        res2
+        })
           .then((value) => {
             const gav_ = h2d((value.result[0]));
             currentDataFinance.gav = (parseFloat(gav_) / 1000000000000000000)
             currentDataFinance.date = Date.now()
+            console.log(index)
+            DataFinance = docs[index].dataFinance
+            // console.log(DataFinance)
+        
             DataFinance.push(currentDataFinance)
-            console.log(DataFinance)
 
             if (DataFinance) {
               let Daily_Income = 0
               let Total_Income = 0
               let Weekly_Income = 0
               let Monthly_Income = 0
-
 
 
               let list = DataFinance
@@ -245,7 +246,6 @@ async function run() {
 
 
               let day_epoch = moment().subtract(1, "days").valueOf();
-
               const closestD = tabEpoch.reduce((a, b) => {
                 return Math.abs(b - day_epoch) < Math.abs(a - day_epoch) ? b : a;
               });
@@ -384,14 +384,6 @@ async function run() {
                 });
               }
 
-              // console.log(Daily_Income)
-              // console.log(Total_Income)
-              // console.log(Weekly_Income)
-              // console.log(Monthly_Income)
-              // console.log(RenderWeekly)
-              // console.log(RenderDaily)
-              // console.log(RenderMonthly)
-              // console.log(RenderTotal)
               FinalRender.dailyIncome = Daily_Income
               FinalRender.weeklyIncome = Weekly_Income
               FinalRender.monthlyIncome = Monthly_Income
@@ -401,6 +393,7 @@ async function run() {
               FinalRender.dataFinanceM = RenderMonthly
               FinalRender.dataFinance = RenderTotal
               console.log(FinalRender)
+              
               post(FinalRender)
             }
 
@@ -422,17 +415,23 @@ async function run() {
   }
 }
 
-var minutes = 30
+var minutes = 60
 var the_interval = minutes * 60 * 1000;
 
-setInterval(function () {
-  console.log("I am doing my 5 minutes check");
-  run()
-}, the_interval);
-;
+// setInterval(function () {
+//   run()
+// }, the_interval);
+run()
+
 
 console.log("init app")
 
+module.exports = app;
+
 app.listen(process.env.PORT || 3000,
   () => console.log("Server is running..."));
+
+
+
+
 
